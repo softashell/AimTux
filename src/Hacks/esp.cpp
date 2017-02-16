@@ -1224,3 +1224,47 @@ void ESP::CreateMove(CUserCmd* cmd)
 {
 	viewanglesBackup = cmd->viewangles;
 }
+
+void ESP::FireGameEvent(IGameEvent* event)
+{
+    if (!event)
+      return;
+
+    if (!engine->IsInGame())
+      return;
+
+    pstring str;
+    str << "echo ";
+
+    if (strcmp(event->GetName(), "inferno_startburn") == 0)
+    {
+      str << event->GetName();
+      str << " molly started";
+
+      int entityid = event->GetInt("entityid");
+
+      float x = event->GetFloat("x");
+      float y = event->GetFloat("y");
+      float z = event->GetFloat("z");
+      
+      str << " entity id: ";
+      str << std::to_string(entityid);
+      str << " location: ";
+      str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+    }
+    else if (strcmp(event->GetName(), "inferno_expire") == 0)
+    {
+      str << event->GetName();
+      str << " molly ended";
+    }
+    else if (strcmp(event->GetName(), "round_prestart") == 0)
+    {
+        str << event->GetName();
+        str << " cleaning things up";
+    } else {
+      return;
+    }
+
+    engine->ExecuteClientCmd(str.c_str());
+}
+

@@ -43,4 +43,5 @@ namespace ESP
 	void Paint();
 	void EmitSound(int iEntIndex, const char *pSample);
 	void CreateMove(CUserCmd* cmd);
+	void FireGameEvent(IGameEvent* event);
 }
