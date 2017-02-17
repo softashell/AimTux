@@ -87,13 +87,14 @@ void UI::UpdateWeaponSettings()
 	if (Settings::Aimbot::weapons.find(currentWeapon) == Settings::Aimbot::weapons.end())
 		Settings::Aimbot::weapons[currentWeapon] = AimbotWeapon_t();
 
-	AimbotWeapon_t settings = {enabled, silent, friendly, bone, aimkey, aimkeyOnly,
-							   smoothEnabled, smoothValue, smoothType, smoothSaltEnabled, smoothSaltMultiplier,
-							   errorMarginEnabled, errorMarginValue,
-							   autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
-							   rcsEnabled, rcsAlwaysOn, rcsAmountX, rcsAmountY,
-							   autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
-							   noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallValue, autoAimRealDistance, autoSlow, autoSlowMinDamage, predEnabled
+	AimbotWeapon_t settings = {
+			enabled, silent, friendly, bone, aimkey, aimkeyOnly,
+			smoothEnabled, smoothValue, smoothType, smoothSaltEnabled, smoothSaltMultiplier,
+			errorMarginEnabled, errorMarginValue,
+			autoAimEnabled, autoAimValue, aimStepEnabled, aimStepValue,
+			rcsEnabled, rcsAlwaysOn, rcsAmountX, rcsAmountY,
+			autoPistolEnabled, autoShootEnabled, autoScopeEnabled,
+			noShootEnabled, ignoreJumpEnabled, smokeCheck, flashCheck, autoWallEnabled, autoWallValue, autoAimRealDistance, autoSlow, autoSlowMinDamage, predEnabled
 	};
 
 	for (int bone = (int) Hitbox::HITBOX_HEAD; bone <= (int) Hitbox::HITBOX_ARMS; bone++)
@@ -132,11 +133,11 @@ void Aimbot::RenderTab()
 			if (!isDefault && !Util::Contains(Util::ToLower(std::string(filterWeapons)), Util::ToLower(Util::Items::GetItemDisplayName(it.first).c_str())))
 				continue;
 
-			if (Util::Items::isKnife(it.first) || Util::Items::isGlove(it.first) || Util::Items::isUtility(it.first))
+			if (Util::Items::IsKnife(it.first) || Util::Items::IsGlove(it.first) || Util::Items::IsUtility(it.first))
 				continue;
 
-			const bool item_selected = ((int)it.first == (int) currentWeapon);
-			ImGui::PushID((int)it.first);
+			const bool item_selected = ((int) it.first == (int) currentWeapon);
+			ImGui::PushID((int) it.first);
 			std::string formattedName;
 			char changeIndicator = ' ';
 			bool isChanged = Settings::Aimbot::weapons.find(it.first) != Settings::Aimbot::weapons.end();
@@ -406,11 +407,13 @@ void Aimbot::RenderTab()
 			ImGui::Columns(1);
 			ImGui::Separator();
 			if (currentWeapon > ItemDefinitionIndex::INVALID && Settings::Aimbot::weapons.find(currentWeapon) != Settings::Aimbot::weapons.end())
+			{
 				if (ImGui::Button("Clear Weapon Settings", ImVec2(-1, 0)))
 				{
 					Settings::Aimbot::weapons.erase(currentWeapon);
 					UI::ReloadWeaponSettings();
 				}
+			}
 			ImGui::EndChild();
 		}
 	}

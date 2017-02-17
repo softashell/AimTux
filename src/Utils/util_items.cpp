@@ -113,7 +113,7 @@ namespace Util
 			return Util::MapSearchOrDefault<std::string, ItemDefinitionIndex>(&ItemNames, itemName, ItemDefinitionIndex::INVALID);
 		}
 
-		bool isKnife(ItemDefinitionIndex index)
+		bool IsKnife(ItemDefinitionIndex index)
 		{
 			switch (index)
 			{
@@ -135,11 +135,10 @@ namespace Util
 			}
 		}
 
-		bool isUtility(ItemDefinitionIndex index)
+		bool IsUtility(ItemDefinitionIndex index)
 		{
 			switch (index)
 			{
-				case ItemDefinitionIndex::INVALID:
 				case ItemDefinitionIndex::WEAPON_C4:
 				case ItemDefinitionIndex::WEAPON_FLASHBANG:
 				case ItemDefinitionIndex::WEAPON_HEGRENADE:
@@ -153,7 +152,7 @@ namespace Util
 			}
 		}
 
-		bool isGlove(ItemDefinitionIndex index)
+		bool IsGlove(ItemDefinitionIndex index)
 		{
 			switch (index)
 			{
@@ -171,7 +170,7 @@ namespace Util
 			}
 		}
 
-		bool isCTWeapon(ItemDefinitionIndex index)
+		bool IsCTWeapon(ItemDefinitionIndex index)
 		{
 			switch (index)
 			{
@@ -191,7 +190,7 @@ namespace Util
 			}
 		}
 
-		bool isTWeapon(ItemDefinitionIndex index)
+		bool IsTWeapon(ItemDefinitionIndex index)
 		{
 			switch (index)
 			{

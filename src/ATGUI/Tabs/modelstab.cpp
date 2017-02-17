@@ -75,7 +75,8 @@ void Models::RenderTab()
 		if (ImGui::Selectable(Util::Items::GetItemDisplayName(model.first).c_str(), item_selected, ImGuiSelectableFlags_SpanAllColumns))
 		{
 			originalModelCT = (int) model.first;
-			replacementModelCT = (int) Settings::Skinchanger::skinsCT.at(model.first).itemDefinitionIndex;
+			if (Settings::Skinchanger::skinsCT.find(model.first) != Settings::Skinchanger::skinsCT.end())
+				replacementModelCT = (int) Settings::Skinchanger::skinsCT.at(model.first).itemDefinitionIndex;
 		}
 		ImGui::NextColumn();
 
@@ -97,7 +98,7 @@ void Models::RenderTab()
 		switch (originalModelCT)
 		{
 			case (int) ItemDefinitionIndex::WEAPON_KNIFE:
-				if (!Util::Items::isKnife(model.first))
+				if (!Util::Items::IsKnife(model.first))
 					continue;
 				break;
 			case (int) ItemDefinitionIndex::GLOVE_CT_SIDE:
@@ -135,7 +136,8 @@ void Models::RenderTab()
 		if (ImGui::Selectable(Util::Items::GetItemDisplayName(model.first).c_str(), item_selected, ImGuiSelectableFlags_SpanAllColumns))
 		{
 			originalModelT = (int) model.first;
-			replacementModelT = (int) Settings::Skinchanger::skinsT.at(model.first).itemDefinitionIndex;
+			if (Settings::Skinchanger::skinsT.find(model.first) != Settings::Skinchanger::skinsT.end())
+				replacementModelT = (int) Settings::Skinchanger::skinsT.at(model.first).itemDefinitionIndex;
 		}
 		ImGui::NextColumn();
 
@@ -157,7 +159,7 @@ void Models::RenderTab()
 		switch (originalModelT)
 		{
 			case (int) ItemDefinitionIndex::WEAPON_KNIFE_T:
-				if (!Util::Items::isKnife(model.first))
+				if (!Util::Items::IsKnife(model.first))
 					continue;
 				break;
 			case (int) ItemDefinitionIndex::GLOVE_T_SIDE:

@@ -171,6 +171,8 @@ void Visuals::RenderTab()
 			{
 				ImGui::Checkbox("Only When Shooting", &Settings::Recoilcrosshair::showOnlyWhenShooting);
 				SetTooltip("Only show recoil crosshair when shooting");
+				ImGui::Checkbox("Filled", &Settings::ESP::FOVCrosshair::filled);
+				SetTooltip("Fill the fov circle");
 			}
 			ImGui::Columns(1);
 			ImGui::Separator();
@@ -226,7 +228,6 @@ void Visuals::RenderTab()
 				ImGui::Checkbox("Legit", &Settings::Radar::legit);
 				ImGui::Checkbox("In-game Radar", &Settings::Radar::InGame::enabled);
 				SetTooltip("Shows players on the in-game radar");
-
 			}
 			ImGui::NextColumn();
 			{
