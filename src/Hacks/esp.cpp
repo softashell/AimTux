@@ -1257,75 +1257,81 @@ void ESP::CreateMove(CUserCmd* cmd)
 
 void ESP::FireGameEvent(IGameEvent* event)
 {
-    if (!event)
-      return;
+	if (!event)
+		return;
+	
+	if (!engine->IsInGame())
+		return;
+	
+	pstring str;
+	str << "echo ";
+	
+	if (strcmp(event->GetName(), "molotov_detonate") == 0)
+	{
+		str << event->GetName();
+		str << " molotov exploded";
 
-    if (!engine->IsInGame())
-      return;
+		int userid = event->GetInt("userid");
 
-    pstring str;
-    str << "echo ";
+		C_BasePlayer* owner = (C_BasePlayer*) entityList->GetClientEntity(engine->GetPlayerForUserID(userid));
 
-    if (strcmp(event->GetName(), "molotov_detonate") == 0)
-    {
-      str << event->GetName();
-      str << " molotov exploded";
-      
-			int userid = event->GetInt("userid");
-			
-			C_BasePlayer* owner = (C_BasePlayer*) entityList->GetClientEntity(engine->GetPlayerForUserID(userid));
+		float x = event->GetFloat("x");
+		float y = event->GetFloat("y");
+		float z = event->GetFloat("z");
 
-      float x = event->GetFloat("x");
-      float y = event->GetFloat("y");
-      float z = event->GetFloat("z");
-      
-      str << " userid: ";
-      str << std::to_string(userid);
-      str << " location: ";
-      str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
-      str << " index: ";
-      str << std::to_string(owner->GetIndex());
+		str << " userid: ";
+		str << std::to_string(userid);
+		str << " location: ";
+		str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+		str << " index: ";
+		str << std::to_string(owner->GetIndex());
+	}
+	else if (strcmp(event->GetName(), "inferno_startburn") == 0)
+	{
+		str << event->GetName();
+		str << " flame started";
+
+		int entityid = event->GetInt("entityid");
+
+		float x = event->GetFloat("x");
+		float y = event->GetFloat("y");
+		float z = event->GetFloat("z");
+
+		str << " entity id: ";
+		str << std::to_string(entityid);
+		str << " location: ";
+		str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+
+		// FIXME: Is this even possible?
+		C_BaseEntity* entity = entityList->GetClientEntity(entityid);
+		if (entity)
+		{
+			str << " entity: " << std::to_string(entity->GetIndex());
 		}
-		else if (strcmp(event->GetName(), "inferno_startburn") == 0)
-    {
-      str << event->GetName();
-      str << " flame started";
+	}
+	else if (strcmp(event->GetName(), "inferno_expire") == 0)
+	{
+		str << event->GetName();
+		str << " flame ended";
 
-      int entityid = event->GetInt("entityid");
+		int entityid = event->GetInt("entityid");
+		float x = event->GetFloat("x");
+		float y = event->GetFloat("y");
+		float z = event->GetFloat("z");
 
-      float x = event->GetFloat("x");
-      float y = event->GetFloat("y");
-      float z = event->GetFloat("z");
-      
-      str << " entity id: ";
-      str << std::to_string(entityid);
-      str << " location: ";
-      str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
-		
-			C_BaseEntity* entity = entityList->GetClientEntity(entityid);
-			if (entity)
-			{
-					str << " entity: " << std::to_string(entity->GetIndex());
-			}
-    }
-    else if (strcmp(event->GetName(), "inferno_expire") == 0)
-    {
-      str << event->GetName();
-      str << " flame ended";
-      
-			int entityid = event->GetInt("entityid");
-      
-			str << " entity id: ";
-      str << std::to_string(entityid);
-    }
-    else if (strcmp(event->GetName(), "round_prestart") == 0)
-    {
-        str << event->GetName();
-        str << " cleaning things up";
-    } else {
-      return;
-    }
+		str << " entity id: ";
+		str << std::to_string(entityid);
+		str << " location: ";
+		str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+	}
+	else if (strcmp(event->GetName(), "round_prestart") == 0)
+	{
+		str << event->GetName();
+		str << " cleaning things up";
+	} else {
+		return;
+	}
 
-    engine->ExecuteClientCmd(str.c_str());
+	engine->ExecuteClientCmd(str.c_str());
 }
 
