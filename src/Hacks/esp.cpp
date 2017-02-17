@@ -806,6 +806,9 @@ void ESP::DrawThrowable(C_BaseEntity* throwable, ClientClass* client)
 		{
 			nadeName = "Molotov";
 			nadeColor = Settings::ESP::molotovColor;
+				nadeName += "(";
+				nadeName += std::to_string(throwable->GetIndex());
+				nadeName += ")";
 			break;
 		}
 		else if (strstr(mat->GetName(), "decoy"))
@@ -1259,10 +1262,30 @@ void ESP::FireGameEvent(IGameEvent* event)
     pstring str;
     str << "echo ";
 
-    if (strcmp(event->GetName(), "inferno_startburn") == 0)
+    if (strcmp(event->GetName(), "molotov_detonate") == 0)
     {
       str << event->GetName();
-      str << " molly started";
+      str << " molotov exploded";
+      
+			int userid = event->GetInt("userid");
+			
+			C_BasePlayer* owner = (C_BasePlayer*) entityList->GetClientEntity(engine->GetPlayerForUserID(userid));
+
+      float x = event->GetFloat("x");
+      float y = event->GetFloat("y");
+      float z = event->GetFloat("z");
+      
+      str << " userid: ";
+      str << std::to_string(userid);
+      str << " location: ";
+      str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+      str << " index: ";
+      str << std::to_string(owner->GetIndex());
+		}
+		else if (strcmp(event->GetName(), "inferno_startburn") == 0)
+    {
+      str << event->GetName();
+      str << " flame started";
 
       int entityid = event->GetInt("entityid");
 
@@ -1274,11 +1297,22 @@ void ESP::FireGameEvent(IGameEvent* event)
       str << std::to_string(entityid);
       str << " location: ";
       str << std::to_string(x) << ", " << std::to_string(y) << ", " << std::to_string(z);
+		
+			C_BaseEntity* entity = entityList->GetClientEntity(entityid);
+			if (entity)
+			{
+					str << " entity: " << std::to_string(entity->GetIndex());
+			}
     }
     else if (strcmp(event->GetName(), "inferno_expire") == 0)
     {
       str << event->GetName();
-      str << " molly ended";
+      str << " flame ended";
+      
+			int entityid = event->GetInt("entityid");
+      
+			str << " entity id: ";
+      str << std::to_string(entityid);
     }
     else if (strcmp(event->GetName(), "round_prestart") == 0)
     {
